@@ -14,7 +14,7 @@ public class JdbcConfig {
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName("org.postgresql.Driver");
-        dataSource.setUrl("jdbc:mysql://localhost:3306/report");
+        dataSource.setUrl("jdbc:postgresql://localhost:5432/agenda");
         dataSource.setUsername("root");
         dataSource.setPassword("root");
         return dataSource;
