@@ -16,29 +16,29 @@ public class ContatoController {
     private ContatoService contatoService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<Contato> findById(Long id) {
+    public ResponseEntity<Contato> findById(@PathVariable("id") Long id) {
         return ResponseEntity.ok(contatoService.findById(id));
     }
 
     @GetMapping("/usuario/{id}")
-    public ResponseEntity<List<Contato>> findByUsuarioId(Long id) {
+    public ResponseEntity<List<Contato>> findByUsuarioId(@PathVariable("id") Long id) {
         return ResponseEntity.ok(contatoService.findContatoByUsuarioId(id));
     }
 
     @PostMapping("/salvar")
-    public ResponseEntity<Void> save(Contato c) {
+    public ResponseEntity<Void> save(@RequestBody Contato c) {
         contatoService.save(c);
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/atualizar")
-    public ResponseEntity<Void> update(Contato c) {
+    public ResponseEntity<Void> update(@RequestBody Contato c) {
         contatoService.update(c);
         return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/deletar")
-    public ResponseEntity<Void> delete(Contato c) {
+    public ResponseEntity<Void> delete(@RequestBody Contato c) {
         contatoService.delete(c);
         return ResponseEntity.noContent().build();
     }

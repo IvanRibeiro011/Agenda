@@ -16,29 +16,29 @@ public class TelefoneController {
     private TelefoneService telefoneService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<Telefone> findById(Long id) {
+    public ResponseEntity<Telefone> findById(@PathVariable("id") Long id) {
         return ResponseEntity.ok(telefoneService.findById(id));
     }
 
     @GetMapping("/contato/{id}")
-    public ResponseEntity<List<Telefone>> findByContatoId(Long id) {
+    public ResponseEntity<List<Telefone>> findByContatoId(@PathVariable("id") Long id) {
         return ResponseEntity.ok(telefoneService.findByContatoId(id));
     }
 
     @PostMapping("/salvar")
-    public ResponseEntity<Void> save(Telefone t) {
+    public ResponseEntity<Void> save(@RequestBody Telefone t) {
         telefoneService.save(t);
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/atualizar")
-    public ResponseEntity<Void> update(Telefone t) {
+    public ResponseEntity<Void> update(@RequestBody Telefone t) {
         telefoneService.update(t);
         return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/deletar")
-    public ResponseEntity<Void> delete(Long id) {
+    public ResponseEntity<Void> delete(@RequestParam Long id) {
         telefoneService.delete(id);
         return ResponseEntity.noContent().build();
     }
