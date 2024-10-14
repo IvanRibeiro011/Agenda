@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class AtualizarSenhaRequest {
+public class    AtualizarSenhaRequest {
 
     private String email;
     private String senha;

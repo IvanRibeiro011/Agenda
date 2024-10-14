@@ -25,9 +25,9 @@ public class AuthTokenFilter implements Filter {
         HttpServletResponse httpResponse = (HttpServletResponse) response;
 
         String path = httpRequest.getRequestURI();
-        if (path.equals("/usuario/login")
-                || path.equals("usuario/esqueceu-senha")
-                || path.equals("/usuario/salvar")
+        if (path.startsWith("/usuario/login")
+                || path.startsWith("usuario/esqueceu-senha")
+                || path.startsWith("/usuario/salvar")
                 || path.startsWith("/swagger-ui/") ||
                 path.startsWith("/v3/api-docs") ||
                 path.startsWith("/swagger-resources") ||
@@ -41,6 +41,7 @@ public class AuthTokenFilter implements Filter {
             AuthToken authToken = authTokenRepository.findByToken(authHeader);
 
             if (authToken != null && authToken.isAtivo() && authToken.getExpiracao().isAfter(LocalDateTime.now())) {
+                chain.doFilter(request, response);
                 return;
             }
 
