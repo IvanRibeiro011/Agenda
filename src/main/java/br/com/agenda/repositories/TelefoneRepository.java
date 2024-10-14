@@ -17,7 +17,7 @@ public class TelefoneRepository {
     private JdbcTemplate jdbcTemplate;
 
     public void save(Telefone t) {
-        jdbcTemplate.update("INSERT INTO telefone (numero, id_contato) VALUES (?, ?)", t.getNumero(), t.getContato().getId());
+        jdbcTemplate.update("INSERT INTO telefone (numero, contato_id) VALUES (?, ?)", t.getNumero(), t.getContato().getId());
     }
 
     public void delete(Long id) {
@@ -46,7 +46,6 @@ public class TelefoneRepository {
         Long contatoId = rs.getLong("contato_id");
         Contato contato = new Contato();
         contato.setId(contatoId);
-        contato.setNome(rs.getString("contato_nome"));
         telefone.setContato(contato);
 
         return telefone;

@@ -1,5 +1,6 @@
 package br.com.agenda.controllers;
 
+import br.com.agenda.dtos.request.ContatoRequestDTO;
 import br.com.agenda.entities.Contato;
 import br.com.agenda.services.ContatoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,8 +27,8 @@ public class ContatoController {
     }
 
     @PostMapping("/salvar")
-    public ResponseEntity<Void> save(@RequestBody Contato c) {
-        contatoService.save(c);
+    public ResponseEntity<Void> save(@RequestBody ContatoRequestDTO dto) {
+        contatoService.save(dto);
         return ResponseEntity.noContent().build();
     }
 

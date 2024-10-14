@@ -1,5 +1,6 @@
 package br.com.agenda.controllers;
 
+import br.com.agenda.dtos.request.TelefoneRequestDTO;
 import br.com.agenda.entities.Telefone;
 import br.com.agenda.services.TelefoneService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,8 +27,8 @@ public class TelefoneController {
     }
 
     @PostMapping("/salvar")
-    public ResponseEntity<Void> save(@RequestBody Telefone t) {
-        telefoneService.save(t);
+    public ResponseEntity<Void> save(@RequestBody TelefoneRequestDTO dto) {
+        telefoneService.save(dto);
         return ResponseEntity.noContent().build();
     }
 

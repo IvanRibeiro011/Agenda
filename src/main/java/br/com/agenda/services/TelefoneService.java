@@ -1,5 +1,7 @@
 package br.com.agenda.services;
 
+import br.com.agenda.dtos.request.TelefoneRequestDTO;
+import br.com.agenda.entities.Contato;
 import br.com.agenda.entities.Telefone;
 import br.com.agenda.repositories.TelefoneRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +23,13 @@ public class TelefoneService {
         return telefoneRepository.findByContatoId(id);
     }
 
-    public void save(Telefone t) {
-        telefoneRepository.save(t);
+    public void save(TelefoneRequestDTO dto) {
+        Telefone telefone = new Telefone();
+        telefone.setNumero(dto.getNumero());
+        Contato contato = new Contato();
+        contato.setId(dto.getContatoId());
+        telefone.setContato(contato);
+        telefoneRepository.save(telefone);
     }
 
     public void update(Telefone t) {

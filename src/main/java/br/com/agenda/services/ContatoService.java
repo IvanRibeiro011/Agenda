@@ -1,6 +1,8 @@
 package br.com.agenda.services;
 
+import br.com.agenda.dtos.request.ContatoRequestDTO;
 import br.com.agenda.entities.Contato;
+import br.com.agenda.entities.Usuario;
 import br.com.agenda.repositories.ContatoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,7 +23,14 @@ public class ContatoService {
         return contatoRepository.findByUsuarioId(id);
     }
 
-    public void save(Contato contato) {
+    public void save(ContatoRequestDTO dto) {
+        Contato contato = new Contato();
+        contato.setNome(dto.getNome());
+        contato.setEmail(dto.getEmail());
+        contato.setEndereco(dto.getEndereco());
+        Usuario usuario = new Usuario();
+        usuario.setId(dto.getUsuarioId());
+        contato.setUsuario(usuario);
         contatoRepository.save(contato);
         contatoRepository.associateTelefone(contato);
     }
