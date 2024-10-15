@@ -47,6 +47,9 @@ public class TelefoneService {
                 }
             }
         }
+        else {
+            throw new RuntimeException("Nenhum número informado");
+        }
 
         telefoneRepository.saveAll(telefones);
     }
