@@ -33,9 +33,14 @@ public class ContatoService {
         contato.setNome(dto.getNome());
         contato.setEmail(dto.getEmail());
         contato.setEndereco(dto.getEndereco());
-        Usuario usuario = new Usuario();
-        usuario.setId(dto.getUsuarioId());
-        contato.setUsuario(usuario);
+        if(dto.getUsuarioId() != null) {
+            Usuario usuario = new Usuario();
+            usuario.setId(dto.getUsuarioId());
+            contato.setUsuario(usuario);
+        }
+        else{
+            throw new RuntimeException("Usuário não informado");
+        }
         contatoRepository.save(contato);
         contatoRepository.associateTelefone(contato);
     }

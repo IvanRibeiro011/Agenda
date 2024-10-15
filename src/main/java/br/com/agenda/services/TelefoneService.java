@@ -31,9 +31,14 @@ public class TelefoneService {
     public void save(TelefoneRequestDTO dto) {
         Telefone telefone = new Telefone();
         telefone.setNumero(dto.getNumero());
-        Contato contato = new Contato();
-        contato.setId(dto.getContatoId());
-        telefone.setContato(contato);
+        if(dto.getContatoId() != null) {
+            Contato contato = new Contato();
+            contato.setId(dto.getContatoId());
+            telefone.setContato(contato);
+        }
+        else{
+            throw new RuntimeException("Contato não informado");
+        }
         telefoneRepository.save(telefone);
     }
 
