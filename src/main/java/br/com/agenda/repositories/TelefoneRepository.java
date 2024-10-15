@@ -17,8 +17,13 @@ public class TelefoneRepository {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    public void save(Telefone t) {
-        jdbcTemplate.update("INSERT INTO telefone (numero, contato_id) VALUES (?, ?)", t.getNumero(), t.getContato().getId());
+    public void saveAll(List<Telefone> t) {
+        String sql = "INSERT INTO telefone (numero, contato_id) VALUES (?, ?)";
+
+        jdbcTemplate.batchUpdate(sql, t, t.size(), (ps, telefone) -> {
+            ps.setString(1, telefone.getNumero());
+            ps.setLong(2, telefone.getContato().getId());
+        });
     }
 
     public void delete(Long id) {
@@ -34,12 +39,11 @@ public class TelefoneRepository {
     }
 
     public Telefone findTelefoneById(Long id) {
-        try{
+        try {
             return jdbcTemplate.queryForObject("SELECT t.id,t.numero,t.contato_id,c.id as contato_id,c.nome as contato_nome" +
                     " FROM telefone t Inner Join Contato c on t.contato_id = c.id " +
                     " WHERE id = ?", this::mapRowToTelefone, id);
-        }
-        catch (EmptyResultDataAccessException e){
+        } catch (EmptyResultDataAccessException e) {
             return null;
         }
     }

@@ -7,6 +7,7 @@ import br.com.agenda.repositories.TelefoneRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -29,17 +30,25 @@ public class TelefoneService {
     }
 
     public void save(TelefoneRequestDTO dto) {
-        Telefone telefone = new Telefone();
-        telefone.setNumero(dto.getNumero());
-        if(dto.getContatoId() != null) {
-            Contato contato = new Contato();
-            contato.setId(dto.getContatoId());
-            telefone.setContato(contato);
+        List<Telefone> telefones = new ArrayList<>();
+        if(!dto.getNumeros().isEmpty()){
+            for (String numero: dto.getNumeros()){
+                Telefone telefone = new Telefone();
+
+                telefone.setNumero(numero);
+                if(dto.getContatoId() != null) {
+                    Contato contato = new Contato();
+                    contato.setId(dto.getContatoId());
+                    telefone.setContato(contato);
+                    telefones.add(telefone);
+                }
+                else{
+                    throw new RuntimeException("Contato não informado");
+                }
+            }
         }
-        else{
-            throw new RuntimeException("Contato não informado");
-        }
-        telefoneRepository.save(telefone);
+
+        telefoneRepository.saveAll(telefones);
     }
 
     public void update(Telefone t) {
