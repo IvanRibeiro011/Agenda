@@ -3,6 +3,7 @@ package br.com.agenda.repositories;
 import br.com.agenda.entities.Contato;
 import br.com.agenda.entities.Telefone;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -33,9 +34,14 @@ public class TelefoneRepository {
     }
 
     public Telefone findTelefoneById(Long id) {
-        return jdbcTemplate.queryForObject("SELECT t.id,t.numero,t.contato_id,c.id as contato_id,c.nome as contato_nome" +
-                " FROM telefone t Inner Join Contato c on t.contato_id = c.id " +
-                " WHERE id = ?", this::mapRowToTelefone, id);
+        try{
+            return jdbcTemplate.queryForObject("SELECT t.id,t.numero,t.contato_id,c.id as contato_id,c.nome as contato_nome" +
+                    " FROM telefone t Inner Join Contato c on t.contato_id = c.id " +
+                    " WHERE id = ?", this::mapRowToTelefone, id);
+        }
+        catch (EmptyResultDataAccessException e){
+            return null;
+        }
     }
 
     private Telefone mapRowToTelefone(ResultSet rs, int rowNum) throws SQLException {

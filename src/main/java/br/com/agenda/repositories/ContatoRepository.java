@@ -4,6 +4,7 @@ import br.com.agenda.entities.Contato;
 import br.com.agenda.entities.Telefone;
 import br.com.agenda.entities.Usuario;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -28,25 +29,29 @@ public class ContatoRepository {
                 contato.getNome(), contato.getEmail(), contato.getEndereco(), contato.getId());
     }
 
-    public void associateTelefone(Contato c){
-        for(Telefone t : c.getTelefone()) {
+    public void associateTelefone(Contato c) {
+        for (Telefone t : c.getTelefone()) {
             jdbcTemplate.update("INSERT INTO telefone (numero, contato_id) VALUES (?, ?)", t.getNumero(), c.getId());
         }
     }
 
-    public void updateTelefoneByContatoId(Contato c){
+    public void updateTelefoneByContatoId(Contato c) {
         jdbcTemplate.update("UPDATE telefone set numero = ? WHERE contato_id = ?", c.getId());
     }
 
     public void delete(Contato c) {
-        if(c.getTelefone() != null){
+        if (c.getTelefone() != null) {
             jdbcTemplate.update("DELETE FROM telefone WHERE contato_id = ?", c.getId());
         }
         jdbcTemplate.update("DELETE FROM contato WHERE id = ?", c.getId());
     }
 
     public Contato findById(Long id) {
-        return jdbcTemplate.queryForObject("SELECT * FROM contato WHERE id = ?", this::mapRowToContato, id);
+        try {
+            return jdbcTemplate.queryForObject("SELECT * FROM contato WHERE id = ?", this::mapRowToContato, id);
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
     }
 
     public List<Contato> findByUsuarioId(Long id) {

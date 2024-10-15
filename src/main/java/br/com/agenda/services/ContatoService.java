@@ -16,7 +16,12 @@ public class ContatoService {
     private ContatoRepository contatoRepository;
 
     public Contato findById(Long id) {
-        return contatoRepository.findById(id);
+        Contato contato = contatoRepository.findById(id);
+        if(contato != null){
+            return contato;
+        } else {
+            throw new RuntimeException("Contato não encontrado");
+        }
     }
 
     public List<Contato> findContatoByUsuarioId(Long id) {

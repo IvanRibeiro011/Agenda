@@ -16,7 +16,12 @@ public class TelefoneService {
     private TelefoneRepository telefoneRepository;
 
     public Telefone findById(Long id) {
-        return telefoneRepository.findTelefoneById(id);
+        Telefone telefone = telefoneRepository.findTelefoneById(id);
+        if (telefone != null) {
+            return telefone;
+        } else {
+            throw new RuntimeException("Telefone não encontrado");
+        }
     }
 
     public List<Telefone> findByContatoId(Long id) {

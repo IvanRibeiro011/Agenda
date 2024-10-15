@@ -32,17 +32,36 @@ public class AuthTokenService {
     }
 
     public AuthToken findByToken(String token) {
-        return authTokenRepository.findByToken(token);
+        AuthToken authToken = authTokenRepository.findByToken(token);
+        if (authToken != null && authToken.getExpiracao().isAfter(LocalDateTime.now()))
+            return authToken;
+        else
+            throw new RuntimeException("Token não encontrado ou expirado");
     }
 
     public AuthToken findByTokenAndUsuarioId(String token, Long usuarioId) {
-        return authTokenRepository.findByTokenAndUsuarioId(token, usuarioId);
+        AuthToken authToken = authTokenRepository.findByToken(token);
+        if (authToken != null)
+            return authToken;
+        else
+            throw new RuntimeException("Token não encontrado ou expirado");
     }
 
     public void deactivateToken(String token) {
         authTokenRepository.deactivateToken(token);
     }
 
+
+    @Scheduled(fixedRate = 60000)
+    public void inativarTokensPorDataExpiracao(){
+        List<AuthToken> tokens = authTokenRepository.findAll();
+        tokens.forEach(token -> {
+            if(token.getExpiracao().isBefore(LocalDateTime.now())){
+                token.setAtivo(false);
+                authTokenRepository.save(token);
+            }
+        });
+    }
 
     @Scheduled(fixedRate = 60000)
     public void deleteTokensInativos() {

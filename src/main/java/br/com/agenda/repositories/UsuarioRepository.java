@@ -3,6 +3,7 @@ package br.com.agenda.repositories;
 import br.com.agenda.entities.Contato;
 import br.com.agenda.entities.Usuario;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -26,7 +27,11 @@ public class UsuarioRepository {
     }
 
     public Usuario findById(Long id) {
-        return jdbcTemplate.queryForObject("SELECT * FROM usuario WHERE id = ?", this::mapRowToUsuario, id);
+        try {
+            return jdbcTemplate.queryForObject("SELECT * FROM usuario WHERE id = ?", this::mapRowToUsuario, id);
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
     }
 
     public void update(Usuario usuario) {
@@ -55,7 +60,11 @@ public class UsuarioRepository {
         return usuario;
     }
 
-    public Usuario findByEmailESenha(String email,String senha) {
-        return jdbcTemplate.queryForObject("SELECT * FROM usuario WHERE email = ? AND senha = ?", this::mapRowToUsuario, email,senha);
+    public Usuario findByEmailESenha(String email, String senha) {
+        try {
+            return jdbcTemplate.queryForObject("SELECT * FROM usuario WHERE UPPER(email) = UPPER(?) AND UPPER(senha) = UPPER(?)", this::mapRowToUsuario, email, senha);
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
     }
 }

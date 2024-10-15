@@ -2,6 +2,7 @@ package br.com.agenda.repositories;
 
 import br.com.agenda.entities.AuthToken;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -44,8 +45,13 @@ public class AuthTokenRepository {
     }
 
     public AuthToken findByToken(String token) {
-        String sql = "SELECT * FROM authToken WHERE token = ?";
-        return jdbcTemplate.queryForObject(sql, new AuthTokenRowMapper(), token);
+        try{
+            String sql = "SELECT * FROM authToken WHERE token = ?";
+            return jdbcTemplate.queryForObject(sql, new AuthTokenRowMapper(), token);
+        }
+        catch (EmptyResultDataAccessException e){
+            return null;
+        }
     }
 
     public void deactivateToken(String token) {
@@ -59,8 +65,13 @@ public class AuthTokenRepository {
     }
 
     public AuthToken findByTokenAndUsuarioId(String token, Long usuarioId) {
-        String sql = "SELECT * FROM authToken WHERE token = ? AND usuario_id = ?";
-        return jdbcTemplate.queryForObject(sql, new AuthTokenRowMapper(), token, usuarioId);
+        try{
+            String sql = "SELECT * FROM authToken WHERE token = ? AND usuario_id = ?";
+            return jdbcTemplate.queryForObject(sql, new AuthTokenRowMapper(), token, usuarioId);
+        }
+        catch (EmptyResultDataAccessException e){
+            return null;
+        }
     }
 
     private static class AuthTokenRowMapper implements RowMapper<AuthToken> {

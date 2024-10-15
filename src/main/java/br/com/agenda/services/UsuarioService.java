@@ -36,7 +36,12 @@ public class UsuarioService {
     }
 
     public Usuario findById(Long id) {
-        return usuarioRepository.findById(id);
+        Usuario usuario = usuarioRepository.findById(id);
+        if(usuario != null){
+            return usuario;
+        } else {
+            throw new RuntimeException("Usuário não encontrado");
+        }
     }
 
     public LoginResponse login(LoginRequest loginRequest) {
